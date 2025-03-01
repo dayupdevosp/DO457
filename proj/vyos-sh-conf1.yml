@@ -1,0 +1,15 @@
+---
+- name: Show the running config of a Vyos system
+  hosts: spine01
+
+  tasks:
+
+  - name: execute the command
+    vyos_command:
+      commands:
+      - sh conf com
+    register: result
+
+  - name: show result
+    debug:
+      var: result

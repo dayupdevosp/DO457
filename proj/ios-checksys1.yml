@@ -1,0 +1,27 @@
+---
+- name: back up config and look at device health indicators on iso devices
+  hosts: ios
+
+  tasks:
+
+  - name: backup the device configuration
+    ios_config:
+      backup: yes
+
+
+  - name: look at device health indicators
+    ios_command:
+      commands:
+      # this provides hostname uptime
+      - sh ver | include uptime
+      - sh ip domain
+      - show clock
+      - show ip name-server
+      - show proc mem | include Total
+     register: results
+
+  - name: show results
+    debug:
+      msg: "{{ item }}"
+    loop: "{{ results.stdout_lines }}"
+

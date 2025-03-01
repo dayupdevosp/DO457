@@ -1,0 +1,9 @@
+---
+- name: A reachability test 
+  hosts: cs01
+
+  tasks:
+  
+  - name: Test reachability to 172.25.250.9
+    ios_ping:
+      dest: 172.25.250.9

@@ -1,0 +1,47 @@
+---
+- name: back up config and inspect health on VyOS
+  hosts: VyOS
+  vars:
+    ansible_password: "{ vyos_pass }"
+  
+
+  tasks:
+
+  - name: backup config
+    vyos_command:
+      commands:
+      - sh host name
+      - show system uptime
+      - show host domain
+      - show host date
+      - show host os
+    register: results
+
+  - name: show results
+    debug:
+      var: result.stdout
+
+- name: back up config and inspect health on ios
+  hosts: ios
+  vars:
+    ansible_password: "{{ ios_pass }}"
+
+  tasks:
+
+    - name: backup config
+      ios_config:
+        backup: yes
+
+    - name: look at system elements
+      ios_command:
+        commands:
+        - show ver | include uptime
+        - show ip domain
+        - show clock
+        - show ip name-server
+      register: results
+
+    - name: show results
+      debug:
+        var: results.stdout
+
